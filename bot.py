@@ -6,7 +6,7 @@ s_city = "Moscow,RU"
 city_id = 524901
 appid = config.appid
 res = requests.get("http://api.openweathermap.org/data/2.5/weather",
-             params={'id': city_id, 'units': 'metric', 'lang': 'en', 'APPID': appid})
+             params={'id': city_id, 'units': 'metric', 'lang': 'ru', 'APPID': appid})
 data = res.json()
 
 bot = telebot.TeleBot(config.token)
