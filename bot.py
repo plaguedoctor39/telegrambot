@@ -32,7 +32,17 @@ def request_current_weather(city_id):
         print("Exception (weather):", e)
         pass
 """
+weather_get = ''
+weather_out = dict.copy(data['main'])
+"""
+for key, value in weather_out.items():
+    print(str(key), " : " , str(value))
+    """
+weather_get += data['weather'][0]['description'] + "\n"
+for key, value in weather_out.items():
+    weather_get += str(key) + ": " + str(value) + "\n"
 
+#print(weather_get)
 @bot.message_handler(content_types=['text'])
 def send_text(message):
     if message.text.lower() == 'hello':
@@ -48,6 +58,9 @@ def send_text(message):
         bot.send_message(message.chat.id, 'https://vk.com/daniilshishov39')
     elif message.text.lower() == 'weather' :
         #request_current_weather(city_id)
+        #print(data['main'])
+        bot.send_message(message.chat.id, weather_get)
+        """
         bot.send_message(message.chat.id, "conditions:")
         bot.send_message(message.chat.id, data['weather'][0]['description'])
         bot.send_message(message.chat.id, "temp")
@@ -56,6 +69,7 @@ def send_text(message):
         bot.send_message(message.chat.id, data['main']['temp_min'])
         bot.send_message(message.chat.id, "temp_max")
         bot.send_message(message.chat.id, data['main']['temp_max'])
+        """
             
 @bot.message_handler(content_types=['sticker'])
 def sticker_id(message):
