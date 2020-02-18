@@ -115,7 +115,7 @@ def send_text(message):
         callback_button = types.InlineKeyboardButton(text="Привет", callback_data="test")
         switch_button = types.InlineKeyboardButton(text="Поприветствовать другого", switch_inline_query="heh, здарова")
         keyboard.add(url_button, callback_button, switch_button)
-        bot.send_message(message.chat.id, "Выбирай кнопку или пользуйся доступными командами", reply_markup=keyboard)
+        bot.send_message(message.chat.id, "Выбирай кнопку или пользуйся доступными командами /commands", reply_markup=keyboard)
             
 @bot.message_handler(content_types=['sticker'])
 def sticker_id(message):
