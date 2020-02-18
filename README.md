@@ -5,5 +5,5 @@ id бота в телеграмм - @examtest1bot
 ### Доступные команды:
 * hello
 * tg
-* vkpage
+* vk
 * weather
