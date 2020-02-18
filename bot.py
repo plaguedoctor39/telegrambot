@@ -4,6 +4,7 @@ import telebot
 import requests
 import json
 #import botan
+from telebot import types
 import random
 random.seed()
 s_city = "Moscow,RU"
@@ -25,14 +26,15 @@ WEBHOOK_URL_PATH = "/%s/" % (config.token)
 """
 
 bot = telebot.TeleBot(config.token)
-"""
-keyboard1 = telebot.types.ReplyKeyboardMarkup()
-keyboard1.row('hello', 'tg', 'vkpage', 'weather')
 
-@bot.message_handler(commands=['start'])
+keyboard1 = telebot.types.ReplyKeyboardRemove()
+cmds = 'Вот список доступных команд: \n' + 'Hello \n' + 'tg \n' + 'vk \n' + 'weather'
+@bot.message_handler(commands=['commands'])
 def start_message(message):
-    bot.send_message(message.chat.id, 'Привет, ты написал мне /start', reply_markup=keyboard1)
-"""
+    bot.send_message(message.chat.id, cmds)
+    
+
+
 @bot.message_handler(commands=['random'])
 def cmd_random(message):
     bot.send_message(message.chat.id, random.randint(1, 10))
@@ -56,6 +58,28 @@ def request_current_weather(city_id):
         print("Exception (weather):", e)
         pass
 """
+
+"""
+@bot.message_handler(content_types=["text"])
+def any_msg(message):
+    keyboard = types.InlineKeyboardMarkup(row_width=2)
+    url_button = types.InlineKeyboardButton(text="VK", url="https://vk.com/daniilshishov39")
+    callback_button = types.InlineKeyboardButton(text="Привет", callback_data="test")
+    switch_button = types.InlineKeyboardButton(text="Switch", switch_inline_query="Telegram")
+    keyboard.add(url_button, callback_button, switch_button)
+    bot.send_message(message.chat.id, "Да да я", reply_markup=keyboard)
+"""
+
+@bot.callback_query_handler(func=lambda call: True)
+def callback_inline(call):
+    if call.message:
+        if call.data == "test":
+            bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text="Привет, пользователь")
+            bot.answer_callback_query(callback_query_id=call.id, show_alert=False, text="Привет, пользователь!")
+    elif call.inline_message_id:
+        if call.data == "test":
+            bot.edit_message_text(inline_message_id=call.inline_message_id, text="Привет, пользователь")
+
 weather_get = ''
 weather_out = dict.copy(data['main'])
 """
@@ -66,34 +90,32 @@ weather_get += data['weather'][0]['description'] + "\n"
 for key, value in weather_out.items():
     weather_get += str(key) + ": " + str(value) + "\n"
 
-#print(weather_get)
 @bot.message_handler(content_types=['text'])
 def send_text(message):
     if message.text.lower() == 'hello':
-        bot.send_message(message.chat.id, 'Hello, guest')
+        helloname = ''
+        helloname += 'Hello, ' + str(message.chat.username)
+        bot.send_message(message.chat.id, helloname)
     elif message.text.lower() == 'tg':
         bot.send_message(message.chat.id, '@ssandess')
     elif message.text.lower() == 'i love u':
         bot.send_sticker(message.chat.id, 'CAADAgADZgkAAnlc4gmfCor5YbYYRAI')
     elif message.text.lower() == 'chat' :
-        #print(message.from_user)
         print(message.chat)
-    elif message.text.lower() == 'vkpage' :
-        bot.send_message(message.chat.id, 'https://vk.com/daniilshishov39')
+    elif message.text.lower() == 'vk' :
+        keyboard = types.InlineKeyboardMarkup()
+        url_button = types.InlineKeyboardButton(text="Перейти на страницу вк", url="https://vk.com/daniilshishov39")
+        keyboard.add(url_button)
+        bot.send_message(message.chat.id, "Нажми на кнопку и переходи на мою страницу.", reply_markup=keyboard)
     elif message.text.lower() == 'weather' :
-        #request_current_weather(city_id)
-        #print(data['main'])
         bot.send_message(message.chat.id, weather_get)
-        """
-        bot.send_message(message.chat.id, "conditions:")
-        bot.send_message(message.chat.id, data['weather'][0]['description'])
-        bot.send_message(message.chat.id, "temp")
-        bot.send_message(message.chat.id, data['main']['temp'])
-        bot.send_message(message.chat.id, "temp_min:")
-        bot.send_message(message.chat.id, data['main']['temp_min'])
-        bot.send_message(message.chat.id, "temp_max")
-        bot.send_message(message.chat.id, data['main']['temp_max'])
-        """
+    else:
+        keyboard = types.InlineKeyboardMarkup(row_width=2)
+        url_button = types.InlineKeyboardButton(text="VK", url="https://vk.com/daniilshishov39")
+        callback_button = types.InlineKeyboardButton(text="Привет", callback_data="test")
+        switch_button = types.InlineKeyboardButton(text="Поприветствовать другого", switch_inline_query="heh, здарова")
+        keyboard.add(url_button, callback_button, switch_button)
+        bot.send_message(message.chat.id, "Выбирай кнопку или пользуйся доступными командами", reply_markup=keyboard)
             
 @bot.message_handler(content_types=['sticker'])
 def sticker_id(message):
