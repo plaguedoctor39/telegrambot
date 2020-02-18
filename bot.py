@@ -27,8 +27,7 @@ WEBHOOK_URL_PATH = "/%s/" % (config.token)
 
 bot = telebot.TeleBot(config.token)
 
-keyboard1 = telebot.types.ReplyKeyboardRemove()
-cmds = 'Вот список доступных команд: \n' + 'Hello \n' + 'tg \n' + 'vk \n' + 'weather'
+cmds = 'Вот список доступных команд: \n' + '/Hello \n' + '/tg \n' + '/vk \n' + '/weather'
 @bot.message_handler(commands=['commands'])
 def start_message(message):
     bot.send_message(message.chat.id, cmds)
@@ -42,7 +41,24 @@ def cmd_random(message):
     #botan.track(config.botan_key, message.chat.id, message, 'Случайное число')
     return
 
+@bot.message_handler(commands=['weather'])
+def cmd_random(message):
+    bot.send_message(message.chat.id, weather_get)
 
+@bot.message_handler(commands=['vk'])
+def cmd_random(message):
+    keyboard = types.InlineKeyboardMarkup()
+    url_button = types.InlineKeyboardButton(text="Перейти на страницу вк", url="https://vk.com/daniilshishov39")
+    keyboard.add(url_button)
+    bot.send_message(message.chat.id, "Нажми на кнопку и переходи на мою страницу.", reply_markup=keyboard)
+@bot.message_handler(commands=['tg'])
+def cmd_random(message):
+    bot.send_message(message.chat.id, '@ssandess')
+@bot.message_handler(commands=['Hello'])
+def cmd_random(message):
+    helloname = ''
+    helloname += 'Hello, ' + str(message.chat.username)
+    bot.send_message(message.chat.id, helloname)
 """
 def request_current_weather(city_id):
     try:
@@ -74,7 +90,7 @@ def any_msg(message):
 def callback_inline(call):
     if call.message:
         if call.data == "test":
-            bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text="Привет, пользователь")
+            bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text="Привет, пользователь!")
             bot.answer_callback_query(callback_query_id=call.id, show_alert=False, text="Привет, пользователь!")
     elif call.inline_message_id:
         if call.data == "test":
@@ -92,23 +108,10 @@ for key, value in weather_out.items():
 
 @bot.message_handler(content_types=['text'])
 def send_text(message):
-    if message.text.lower() == 'hello':
-        helloname = ''
-        helloname += 'Hello, ' + str(message.chat.username)
-        bot.send_message(message.chat.id, helloname)
-    elif message.text.lower() == 'tg':
-        bot.send_message(message.chat.id, '@ssandess')
-    elif message.text.lower() == 'i love u':
+    if message.text.lower() == 'i love u':
         bot.send_sticker(message.chat.id, 'CAADAgADZgkAAnlc4gmfCor5YbYYRAI')
     elif message.text.lower() == 'chat' :
         print(message.chat)
-    elif message.text.lower() == 'vk' :
-        keyboard = types.InlineKeyboardMarkup()
-        url_button = types.InlineKeyboardButton(text="Перейти на страницу вк", url="https://vk.com/daniilshishov39")
-        keyboard.add(url_button)
-        bot.send_message(message.chat.id, "Нажми на кнопку и переходи на мою страницу.", reply_markup=keyboard)
-    elif message.text.lower() == 'weather' :
-        bot.send_message(message.chat.id, weather_get)
     else:
         keyboard = types.InlineKeyboardMarkup(row_width=2)
         url_button = types.InlineKeyboardButton(text="VK", url="https://vk.com/daniilshishov39")
