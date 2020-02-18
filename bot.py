@@ -109,7 +109,7 @@ for key, value in weather_out.items():
 @bot.message_handler(content_types=['text'])
 def send_text(message):
     if message.text.lower() == 'i love u':
-        bot.send_sticker(message.chat.id, 'CAADAgADZgkAAnlc4gmfCor5YbYYRAI')
+        bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAICJV5LyGMPp0eOdHGu7PyZq2xDfVbmAAL1AgAC_NjQCouOxRiD2Z0rGAQ')
     elif message.text.lower() == 'chat' :
         print(message.chat)
     else:
