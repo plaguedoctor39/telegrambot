@@ -42,20 +42,22 @@ def cmd_random(message):
     return
 
 @bot.message_handler(commands=['weather'])
-def cmd_random(message):
+def cmd_weather(message):
     bot.send_message(message.chat.id, weather_get)
 
 @bot.message_handler(commands=['vk'])
-def cmd_random(message):
+def cmd_vk(message):
     keyboard = types.InlineKeyboardMarkup()
     url_button = types.InlineKeyboardButton(text="Перейти на страницу вк", url="https://vk.com/daniilshishov39")
     keyboard.add(url_button)
     bot.send_message(message.chat.id, "Нажми на кнопку и переходи на мою страницу.", reply_markup=keyboard)
+    
 @bot.message_handler(commands=['tg'])
-def cmd_random(message):
+def cmd_tg(message):
     bot.send_message(message.chat.id, '@ssandess')
+    
 @bot.message_handler(commands=['Hello'])
-def cmd_random(message):
+def cmd_hello(message):
     helloname = ''
     helloname += 'Hello, ' + str(message.chat.username)
     bot.send_message(message.chat.id, helloname)
@@ -110,6 +112,8 @@ for key, value in weather_out.items():
 def send_text(message):
     if message.text.lower() == 'i love u':
         bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAICJV5LyGMPp0eOdHGu7PyZq2xDfVbmAAL1AgAC_NjQCouOxRiD2Z0rGAQ')
+    elif message.text.lower() == 'durak' :
+        bot.reply_to(message, "Sam {!s}".format(message.text))
     elif message.text.lower() == 'chat' :
         print(message.chat)
     else:
